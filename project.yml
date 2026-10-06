@@ -1,0 +1,57 @@
+name: Brouter
+options:
+  bundleIdPrefix: com.carsonseese
+  deploymentTarget:
+    macOS: "14.0"
+  createIntermediateGroups: true
+  generateEmptyDirectories: false
+
+packages:
+  BrouterCore:
+    path: Packages/BrouterCore
+
+settings:
+  base:
+    SWIFT_VERSION: "6"
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+
+targets:
+  Brouter:
+    type: application
+    platform: macOS
+    sources:
+      - path: Brouter
+    dependencies:
+      - package: BrouterCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.carsonseese.Brouter
+        PRODUCT_NAME: Brouter
+        ENABLE_HARDENED_RUNTIME: YES
+        ENABLE_APP_SANDBOX: NO
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGN_IDENTITY: "-"
+        DEVELOPMENT_TEAM: ""
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ENABLE_USER_SCRIPT_SANDBOXING: YES
+        DEAD_CODE_STRIPPING: YES
+    info:
+      path: Brouter/Info.plist
+      properties:
+        CFBundleDisplayName: Brouter
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSApplicationCategoryType: public.app-category.utilities
+        LSMinimumSystemVersion: $(MACOSX_DEPLOYMENT_TARGET)
+        LSUIElement: true
+        NSHumanReadableCopyright: Copyright © 2026 Carson Seese. MIT License.
+        CFBundleURLTypes:
+          - CFBundleURLName: Web URL
+            CFBundleTypeRole: Viewer
+            CFBundleURLSchemes: [http, https]
+        CFBundleDocumentTypes:
+          - CFBundleTypeName: HTML Document
+            CFBundleTypeRole: Viewer
+            LSHandlerRank: Alternate
+            LSItemContentTypes: [public.html, public.xhtml]

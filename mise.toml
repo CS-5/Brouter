@@ -1,0 +1,29 @@
+[tools]
+xcodegen = "2.46.0"
+swiftlint = "0.65.1"
+swiftformat = "0.63.0"
+
+[env]
+DEVELOPER_DIR = "{{ env.DEVELOPER_DIR | default(value='/Applications/Xcode.app/Contents/Developer') }}"
+
+[tasks.gen]
+description = "Generate Brouter.xcodeproj from project.yml"
+run = "xcodegen generate --quiet"
+
+[tasks.build]
+description = "Build Release into build/"
+depends = ["gen"]
+run = "xcodebuild -project Brouter.xcodeproj -scheme Brouter -configuration Release -destination 'generic/platform=macOS' -derivedDataPath build -quiet build"
+
+[tasks.lint]
+description = "Lint and check formatting"
+run = ["swiftlint lint --strict --quiet", "swiftformat --lint ."]
+
+[tasks.fmt]
+description = "Format sources"
+run = ["swiftformat .", "swiftlint lint --fix --quiet"]
+
+[tasks.run]
+description = "Build and launch Brouter.app"
+depends = ["build"]
+run = "open build/Build/Products/Release/Brouter.app"

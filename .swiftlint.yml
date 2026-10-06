@@ -1,0 +1,39 @@
+included:
+  - Brouter
+  - Packages/BrouterCore/Sources
+  - Packages/BrouterCore/Package.swift
+
+excluded:
+  - build
+  - Packages/BrouterCore/.build
+
+disabled_rules:
+  - trailing_comma # SwiftFormat owns comma style
+
+opt_in_rules:
+  - closure_spacing
+  - contains_over_first_not_nil
+  - empty_count
+  - explicit_init
+  - first_where
+  - implicitly_unwrapped_optional
+  - last_where
+  - modifier_order
+  - redundant_nil_coalescing
+  - sorted_first_last
+  - toggle_bool
+  - unneeded_parentheses_in_closure_argument
+  - vertical_whitespace_closing_braces
+
+line_length:
+  warning: 120
+  ignores_comments: false
+
+identifier_name:
+  excluded: [i, j, id, ok, to]
+
+function_body_length:
+  warning: 60
+
+cyclomatic_complexity:
+  ignores_case_statements: true
