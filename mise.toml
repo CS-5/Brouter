@@ -27,3 +27,7 @@ run = ["swiftformat .", "swiftlint lint --fix --quiet"]
 description = "Build and launch Brouter.app"
 depends = ["build"]
 run = "open build/Build/Products/Release/Brouter.app"
+
+[tasks.release]
+description = "Tag the next CalVer release and push it to trigger CI"
+run = "scripts/tag-release.sh"

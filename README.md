@@ -27,6 +27,7 @@ open /Applications/Brouter.app
 | `mise run run` | Builds and launches the app |
 | `mise run lint` | Runs SwiftLint (strict) and checks SwiftFormat |
 | `mise run fmt` | Formats the sources |
+| `mise run release` | Tags the next CalVer version (`vYYYY.M.N`) and pushes it. CI builds the app and attaches a `.dmg` and `.zip` to a GitHub release |
 
 On first launch, Brouter:
 
