@@ -1,6 +1,6 @@
 # Brouter
 
-A small, lightweight alternative to [Finicky](https://github.com/johnste/finicky) for macOS 14 and later. Brouter
+A small, lightweight link router for macOS 14 and later. Brouter
 sets itself as your default browser and lives in the menu bar. It sends each link you click to a browser, a
 browser profile, or a native app, based on rules in `~/.config/brouter/config.toml`.
 
