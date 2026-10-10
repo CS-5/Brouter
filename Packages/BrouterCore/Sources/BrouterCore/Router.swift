@@ -64,9 +64,11 @@ public struct Router: Sendable {
         }
 
         let stripTracking = matched?.stripTracking ?? config.stripTracking
-        let (url, rewrites) = rewrite(
+        var (url, rewrites) = rewrite(
             input, rule: matched, stripTracking: stripTracking, fallback: fallback, notes: &notes
         )
+        let (wrapped, changes) = containerRewrite(url, rule: matched, app: app, fallback: fallback, notes: &notes)
+        (url, rewrites) = (wrapped, rewrites + changes)
 
         var profile: String?
         var arguments: [String] = []
@@ -138,5 +140,24 @@ public struct Router: Sendable {
             }
         }
         return (url, rewrites)
+    }
+
+    private func containerRewrite(
+        _ url: URL,
+        rule: Rule?,
+        app: ResolvedApp?,
+        fallback: Bool,
+        notes: inout [String]
+    ) -> (URL, [Rewrite]) {
+        guard let rule, let container = rule.container else { return (url, []) }
+        if fallback {
+            notes.append("container \"\(container)\" skipped because \"\(rule.open)\" can't be used")
+        } else if let app {
+            if profiles.supportsContainers(bundleID: app.bundleID ?? "") {
+                return Rewriter.wrapInContainer(url, name: container)
+            }
+            notes.append("containers aren't supported for \"\(app.name)\"; opened without a container")
+        }
+        return (url, [])
     }
 }

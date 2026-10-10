@@ -59,6 +59,8 @@ public enum StarterConfig {
         #                               Vivaldi, Chromium, Firefox, Zen)
         #   scheme         = "linear"   swap the link's scheme to open it in a native app:
         #                               https://linear.app/x becomes linear://linear.app/x
+        #   container      = "Work"     Firefox or Zen container, by display name; needs the
+        #                               "Open external links in a container" extension
         #   strip_tracking = false      override the global tracking setting for this rule
         #
         # Rules match the original link; tracking removal and scheme swaps happen afterwards.

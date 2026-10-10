@@ -52,6 +52,14 @@ public struct ProfileResolver: Sendable {
         Self.families[bundleID] != nil
     }
 
+    /// Containers are a Firefox feature, so only the Firefox family supports them.
+    public func supportsContainers(bundleID: String) -> Bool {
+        switch Self.families[bundleID] {
+        case .firefox: true
+        case .chromium, nil: false
+        }
+    }
+
     public func profiles(bundleID: String) -> [BrowserProfile] {
         switch Self.families[bundleID] {
         case let .chromium(dir): chromiumProfiles(dir)

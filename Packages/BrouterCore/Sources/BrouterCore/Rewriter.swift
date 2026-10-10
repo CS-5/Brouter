@@ -4,9 +4,10 @@ import Foundation
 public enum Rewrite: Codable, Sendable, Equatable {
     case strippedParam(String)
     case schemeSwap(from: String, to: String)
+    case container(String)
 
     private enum CodingKeys: String, CodingKey {
-        case type, param, from, to
+        case type, param, from, to, name
     }
 
     public init(from decoder: any Decoder) throws {
@@ -19,6 +20,8 @@ public enum Rewrite: Codable, Sendable, Equatable {
                 from: container.decode(String.self, forKey: .from),
                 to: container.decode(String.self, forKey: .to)
             )
+        case "container":
+            self = try .container(container.decode(String.self, forKey: .name))
         case let other:
             throw DecodingError.dataCorruptedError(
                 forKey: .type, in: container, debugDescription: "Unknown rewrite type \(other)"
@@ -36,6 +39,9 @@ public enum Rewrite: Codable, Sendable, Equatable {
             try container.encode("scheme", forKey: .type)
             try container.encode(from, forKey: .from)
             try container.encode(to, forKey: .to)
+        case let .container(name):
+            try container.encode("container", forKey: .type)
+            try container.encode(name, forKey: .name)
         }
     }
 }
@@ -77,5 +83,22 @@ enum Rewriter {
         components.scheme = scheme
         guard let swapped = components.url else { return (url, []) }
         return (swapped, [.schemeSwap(from: current, to: scheme)])
+    }
+
+    /// Wraps the link for the "Open external links in a container" Firefox extension, which registers
+    /// `ext+container:`. Both parts are encoded like JavaScript's `encodeURIComponent`, which the extension reads.
+    static func wrapInContainer(_ url: URL, name: String) -> (URL, [Rewrite]) {
+        guard let wrapped = URL(string: "ext+container:name=\(encode(name))&url=\(encode(url.absoluteString))") else {
+            return (url, [])
+        }
+        return (wrapped, [.container(name)])
+    }
+
+    private static let unreserved = CharacterSet(
+        charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.!~*'()"
+    )
+
+    private static func encode(_ text: String) -> String {
+        text.addingPercentEncoding(withAllowedCharacters: unreserved) ?? text
     }
 }

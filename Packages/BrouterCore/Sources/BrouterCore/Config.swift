@@ -37,6 +37,7 @@ public struct Rule: Sendable {
     public var open: String
     public var profile: String?
     public var scheme: String?
+    public var container: String?
     public var stripTracking: Bool?
 
     public init(
@@ -49,6 +50,7 @@ public struct Rule: Sendable {
         open: String,
         profile: String? = nil,
         scheme: String? = nil,
+        container: String? = nil,
         stripTracking: Bool? = nil
     ) {
         self.number = number
@@ -60,6 +62,7 @@ public struct Rule: Sendable {
         self.open = open
         self.profile = profile
         self.scheme = scheme
+        self.container = container
         self.stripTracking = stripTracking
     }
 }

@@ -119,12 +119,18 @@ public enum ConfigLoader {
             if let profile = rule.profile, case let .failure(error) = profiles.resolve(profile, for: app) {
                 warnings.append(ConfigWarning(path: "\(path).profile", message: error.description))
             }
+            if rule.container != nil, !profiles.supportsContainers(bundleID: app.bundleID ?? "") {
+                warnings.append(ConfigWarning(
+                    path: "\(path).container",
+                    message: "containers aren't supported for \"\(app.name)\"; links will open without a container"
+                ))
+            }
         }
         return warnings
     }
 
     private static let ruleKeys: Set<String> = [
-        "host", "path", "url", "regex", "opener", "open", "profile", "scheme", "strip_tracking",
+        "host", "path", "url", "regex", "opener", "open", "profile", "scheme", "container", "strip_tracking",
     ]
 
     private static func parseRules(_ root: TOMLTable) throws(ConfigError) -> [Rule] {
@@ -189,6 +195,7 @@ public enum ConfigLoader {
             open: reader.string("open") ?? "",
             profile: reader.string("profile"),
             scheme: reader.string("scheme"),
+            container: reader.string("container"),
             stripTracking: reader.bool("strip_tracking")
         )
 
@@ -202,6 +209,11 @@ public enum ConfigLoader {
         if rule.open.isEmpty {
             throw ConfigError(.invalid, "missing; set it to an app name or bundle ID", path: reader.keyPath("open"))
         }
+        try validateActions(rule, reader: reader)
+        return rule
+    }
+
+    private static func validateActions(_ rule: Rule, reader: TableReader) throws(ConfigError) {
         if let scheme = rule.scheme, scheme.wholeMatch(of: /[A-Za-z][A-Za-z0-9+.\-]*/) == nil {
             throw ConfigError(
                 .invalid,
@@ -209,7 +221,13 @@ public enum ConfigLoader {
                 path: reader.keyPath("scheme")
             )
         }
-        return rule
+        if rule.container != nil, rule.scheme != nil {
+            throw ConfigError(
+                .invalid,
+                "can't be combined with scheme; containers open the link in Firefox, which a scheme swap would replace",
+                path: reader.keyPath("container")
+            )
+        }
     }
 }
 

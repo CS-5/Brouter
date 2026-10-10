@@ -83,6 +83,7 @@ strings.
 | `opener` | match | App the link was clicked in, by any name `open` accepts or by bundle ID. Case-insensitive |
 | `open` | action | App to open the link in (required) |
 | `profile` | action | Browser profile, by display name (see [Profiles](#profiles)) |
+| `container` | action | Firefox or Zen container, by display name (see [Containers](#containers)) |
 | `scheme` | action | Replace the URL scheme, e.g. `"linear"` (see [Native apps](#native-apps)) |
 | `strip_tracking` | action | Override the global `strip_tracking` for this rule |
 
@@ -118,10 +119,10 @@ Brouter strips these by default: `utm_*`, `fbclid`, `igshid`, `gclid`, `dclid`, 
 
 ### Fallback
 
-If a rule's `open` app isn't installed, the link opens in `default` instead, without that rule's `scheme` swap or
-`profile`. A rule or `default` that names Brouter itself is treated the same way as a missing app. `brouter check`
+If a rule's `open` app isn't installed, the link opens in `default` instead, without that rule's `scheme` swap,
+`container`, or `profile`. A rule or `default` that names Brouter itself is treated the same way as a missing app. `brouter check`
 lists both as warnings. If `default` can't be used either, the link opens in Safari. If an app fails to open a
-link, Brouter retries in Safari, without any scheme swap.
+link, Brouter retries in Safari, without any scheme swap or container.
 
 ### Profiles
 
@@ -134,6 +135,15 @@ link, Brouter retries in Safari, without any scheme swap.
 - You can also give the raw profile directory name, e.g. `Profile 1`.
 - A profile that can't be found produces a warning, and the link opens without one.
 - If Firefox is already running, `-P` may show the profile manager instead of opening the link.
+
+### Containers
+
+`container` opens the link in a Firefox container by wrapping it as `ext+container:name=<name>&url=<link>`.
+
+- Firefox and Zen only, with the [Open external links in a container](https://addons.mozilla.org/firefox/addon/open-url-in-container/) extension installed.
+- `name` is the container's display name.
+- Can't be combined with `scheme`. Combines with `profile`.
+- Skipped on fallback, and for other browsers, with a warning in `brouter check`.
 
 ## Native apps
 

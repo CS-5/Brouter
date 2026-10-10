@@ -29,6 +29,7 @@ public extension Decision {
                 switch rewrite {
                 case let .strippedParam(name): lines.append("  stripped \(name)")
                 case let .schemeSwap(from, to): lines.append("  scheme \(from) → \(to)")
+                case let .container(name): lines.append("  container \(name)")
                 }
             }
         }
