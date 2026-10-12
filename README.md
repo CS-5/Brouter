@@ -1,3 +1,6 @@
+> [!NOTE]
+> This is 100% AI generated. I haven't looked at one line of code and just enforced my preferences for release process and dependency management. Works great for my needs and I intend to support it within that context, but otherwise this is a one-off "maintenance mode" project.
+
 # Brouter
 
 A small, lightweight link router for macOS 14 and later. Brouter
