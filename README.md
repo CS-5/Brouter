@@ -39,7 +39,8 @@ On first launch, Brouter:
 3. Asks macOS to make Brouter the default browser.
 4. Opens the config in your editor.
 
-Launch at Login works only when the app is in `/Applications`.
+The first time Brouter runs from `/Applications`, it also turns on Launch at Login. Turn it off from the menu and
+it stays off. Launch at Login works only when the app is in `/Applications`.
 
 ## Config reference
 
@@ -193,7 +194,7 @@ Exit codes: `0` ok, `1` config error, `2` usage error.
 | Reload Config | Reloads the config. Rarely needed, since saving reloads automatically |
 | Recent Links | The last 10 links, shown as `host → App (rule N)`, `(default)` or `(fallback)`. Click one to copy its URL |
 | Set as Default Browser | Shown only when Brouter isn't the default |
-| Launch at Login | Toggles the login item. Opens System Settings if macOS needs your approval |
+| Launch at Login | Toggles the login item. On by default. Opens System Settings if macOS needs your approval |
 | Quit Brouter | Quits the app |
 
 The icon switches to ⚠︎ while the config has an error or warnings. With `hide_icon = true`, reopen Brouter from

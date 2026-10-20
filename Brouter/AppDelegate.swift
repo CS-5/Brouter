@@ -25,6 +25,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let statusMenu = StatusMenu(store: store, recents: recents)
         self.statusMenu = statusMenu
         store.onChange = { [weak statusMenu] in statusMenu?.configDidChange() }
+        LoginItem.enableByDefault()
 
         if store.error?.kind == .notFound {
             firstRun()
